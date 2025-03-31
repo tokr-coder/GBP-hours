@@ -21,7 +21,6 @@
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       gbp-hours
- * Domain Path:       /languages
  */
 
 // If this file is called directly, abort.
@@ -33,7 +32,7 @@ define( 'GBP_HOURS_VERSION', '1.0.0' );
 
 function business_hours_add_settings_link($links) {
     // Create the settings link 
-    $settings_link = '<a href="' . admin_url('options-general.php?page=business-profile-hours') . '">' . __('Settings', 'business-hours-divi') . '</a>';
+    $settings_link = '<a href="' . admin_url('options-general.php?page=business-profile-hours') . '">' . __('Settings', 'gbp-hours') . '</a>';
     
     // Add the settings link to the beginning of the array
     array_unshift($links, $settings_link);

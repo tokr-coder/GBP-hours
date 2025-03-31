@@ -38,7 +38,7 @@ class BusinessProfileHours {
         $this->display_title = get_option('gpbh_display_title', 'Business Hours');
 
         // Create error log file if it doesn't exist
-        $this->initialize_error_log();
+        //$this->initialize_error_log();
 
         // Enqueue styles
         add_action('wp_enqueue_scripts', array($this, 'enqueue_styles'));
@@ -53,7 +53,7 @@ class BusinessProfileHours {
             '1.3'
         );
     }
-
+/*
     // Initialize error log file
     private function initialize_error_log() {
         if (!file_exists(GPBH_LOG_FILE)) {
@@ -73,7 +73,7 @@ class BusinessProfileHours {
         
         error_log($log_entry, 3, GPBH_LOG_FILE);
     }
-
+*/
     // Add admin menu
     public function add_admin_menu() {
         add_options_page(
@@ -196,7 +196,6 @@ class BusinessProfileHours {
                 <ul>
                     <li>Google Places API usage may incur costs. Check Google's pricing for details.</li>
                     <li>Keep your API key secure and don't share it publicly.</li>
-                    <li>Errors are logged in <?php echo esc_html(GPBH_LOG_FILE); ?> for troubleshooting.</li>
                 </ul>
             </div>
         </details>
@@ -242,7 +241,7 @@ class BusinessProfileHours {
             <p>Current cache status: 
                 <?php
                 $cached = get_transient($this->cache_key);
-                echo $cached ? 'Active (expires in ' . human_time_diff(time(), get_option("_transient_timeout_{$this->cache_key}")) . ')' : 'Not active';
+                echo $cached ? 'Active (expires in ' . esc_html(human_time_diff(time(), get_option("_transient_timeout_{$this->cache_key}"))) . ')' : 'Not active';
                 ?>
             </p>
             <form method="post" action="">
@@ -284,14 +283,14 @@ class BusinessProfileHours {
         
         if (is_wp_error($response)) {
             $error = 'Failed to connect to Google Places API: ' . $response->get_error_message();
-            $this->log_error($error);
+            //$this->log_error($error);
             return array('error' => $error);
         }
 
         $response_code = wp_remote_retrieve_response_code($response);
         if ($response_code !== 200) {
             $error = "API request failed with status code: $response_code";
-            $this->log_error($error);
+            //$this->log_error($error);
             return array('error' => $error);
         }
 
@@ -300,13 +299,13 @@ class BusinessProfileHours {
 
         if (json_last_error() !== JSON_ERROR_NONE) {
             $error = 'Failed to parse API response: ' . json_last_error_msg();
-            $this->log_error($error);
+            //$this->log_error($error);
             return array('error' => $error);
         }
 
         if (isset($data['error_message'])) {
             $error = 'Google Places API error: ' . $data['error_message'];
-            $this->log_error($error);
+            //$this->log_error($error);
             return array('error' => $error);
         }
 
@@ -316,7 +315,7 @@ class BusinessProfileHours {
             // Cache the successful response
             set_transient($this->cache_key, $hours, GPBH_CACHE_TIME);
         } else {
-            $this->log_error($hours['error']);
+            //$this->log_error($hours['error']);
         }
 
         return $hours;
@@ -370,6 +369,3 @@ class BusinessProfileHours {
         return $output;
     }
 }
-
-// Initialize the plugin
-//new BusinessProfileHours();
