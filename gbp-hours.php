@@ -7,17 +7,17 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              https://tomaskrejcar.com
+ * @link              https://plugins.knowsync.dev
  * @since             1.0.0
  * @package           Gbp_Hours
  *
  * @wordpress-plugin
  * Plugin Name:       Business Profile Hours Sync
- * Plugin URI:        https://twoviewsstudio.com
+ * Plugin URI:        https://plugins.knowsync.dev/gbp-hours
  * Description:       Plugin to retrieve business hours using Google Places API and display them on your website. 
  * Version:           1.0.0
- * Author:            TV Plugins
- * Author URI:        https://tomaskrejcar.com/
+ * Author:            KnowSync Plugins
+ * Author URI:        https://plugins.knowsync.dev
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       gbp-hours
@@ -30,6 +30,19 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 define( 'GBP_HOURS_VERSION', '1.0.0' );
+
+function business_hours_add_settings_link($links) {
+    // Create the settings link 
+    $settings_link = '<a href="' . admin_url('options-general.php?page=business-profile-hours') . '">' . __('Settings', 'business-hours-divi') . '</a>';
+    
+    // Add the settings link to the beginning of the array
+    array_unshift($links, $settings_link);
+    
+    return $links;
+}
+
+// Add the filter - make sure to use your actual plugin basename
+add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'business_hours_add_settings_link');
 
 /**
  * The code that runs during plugin activation.

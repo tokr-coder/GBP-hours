@@ -1,6 +1,6 @@
 === Business Profile Hours Sync ===
 Tags: business hours, opening hours, places API, sync with Google Maps
-Donate link: https://tomaskrejcar.com/
+Donate link: https://plugins.knowsync.dev
 Requires at least: 3.0.1
 Tested up to: 3.4
 Stable tag: 4.3
@@ -63,4 +63,4 @@ Initial release of the Business Hours Divi Module.
 
 == Additional Info ==
 
-For support, feature requests, or bug reports, please visit [your support URL].
+For support, feature requests, or bug reports, please visit https://plugins.knowsync.dev.
