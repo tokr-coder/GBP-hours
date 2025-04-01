@@ -9,7 +9,7 @@
  *
  * @link              https://plugins.knowsync.dev
  * @since             1.0.0
- * @package           Gbp_Hours
+ * @package           gbp_Hours
  *
  * @wordpress-plugin
  * Plugin Name:       Business Profile Hours Sync
@@ -75,7 +75,6 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-gbp-hours.php';
 function run_gbp_hours() {
 
 	$plugin = new BusinessProfileHours();
-	//$plugin->run();
 
 }
 run_gbp_hours();
