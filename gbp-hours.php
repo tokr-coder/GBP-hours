@@ -1,12 +1,5 @@
 <?php
 /**
- * The plugin bootstrap file
- *
- * This file is read by WordPress to generate the plugin information in the plugin
- * admin area. This file also includes all of the dependencies used by the plugin,
- * registers the activation and deactivation functions, and defines a function
- * that starts the plugin.
- *
  * @link              https://plugins.knowsync.dev
  * @since             1.0.0
  * @package           gbp_Hours
@@ -32,7 +25,7 @@ define( 'GBP_HOURS_VERSION', '1.0.0' );
 
 function business_hours_add_settings_link($links) {
     // Create the settings link 
-    $settings_link = '<a href="' . admin_url('options-general.php?page=business-profile-hours') . '">' . __('Settings', 'gbp-hours') . '</a>';
+    $settings_link = '<a href="' . admin_url('options-general.php?page=business-profile-hours') . '">' . __('Settings', 'business-profile-hours-sync') . '</a>';
     
     // Add the settings link to the beginning of the array
     array_unshift($links, $settings_link);
@@ -68,6 +61,9 @@ register_deactivation_hook( __FILE__, 'deactivate_gbp_hours' );
  * The core plugin class 
  */
 require plugin_dir_path( __FILE__ ) . 'includes/class-gbp-hours.php';
+
+// Add widget support
+require plugin_dir_path( __FILE__ ) . 'includes/class-gbp-hours-widget.php';
 
 /**
  * Begins execution of the plugin.
