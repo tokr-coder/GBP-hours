@@ -1,11 +1,21 @@
 <?php
-/*
-Plugin Name: Business Profile Hours Sync
-Description: Retrieves and displays business hours using Google Places API with caching and error logging
-Version: 1.0.0
-Author: KnowSync Plugins
-License: GPL2
-*/
+/**
+ *
+ * @link              https://plugins.knowsync.dev
+ * @since             1.0.0
+ * @package           gbp_Hours
+ *
+ * @wordpress-plugin
+ * Plugin Name:       Business Profile Hours Sync
+ * Plugin URI:        https://plugins.knowsync.dev/gbp-hours
+ * Description:       Plugin to retrieve business hours using Google Places API and display them on your website. 
+ * Version:           1.0.0
+ * Author:            KnowSync Plugins
+ * Author URI:        https://plugins.knowsync.dev
+ * License:           GPL-2.0+
+ * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * Text Domain:       business-profile-hours-sync
+ */
 
 // Prevent direct access to this file
 if (!defined('ABSPATH')) {
