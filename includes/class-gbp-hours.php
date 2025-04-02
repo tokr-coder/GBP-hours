@@ -28,6 +28,52 @@ define('GPBH_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('GPBH_CACHE_TIME', 12 * HOUR_IN_SECONDS); // Cache for 12 hours
 define('GPBH_LOG_FILE', WP_CONTENT_DIR . '/gpbh-errors.log');
 
+// Business Hours Widget class
+class Business_Hours_Widget extends WP_Widget {
+    
+    public function __construct() {
+        parent::__construct(
+            'business_hours_widget',
+            'Business Hours',
+            array('description' => 'Display your business hours from Google Business Profile')
+        );
+    }
+    
+    public function widget($args, $instance) {
+        $title = ! empty($instance['title']) ? apply_filters('widget_title', $instance['title']) : '';
+        
+        echo $args['before_widget'];
+        if (!empty($title)) {
+            echo $args['before_title'] . esc_html($title) . $args['after_title'];
+        }
+        
+        // Display the business hours without title to avoid duplication
+        $business_hours = new BusinessProfileHours();
+        echo $business_hours->display_business_hours(array('show_title' => false));
+        
+        echo $args['after_widget'];
+    }
+    
+    public function form($instance) {
+        $title = ! empty($instance['title']) ? $instance['title'] : 'Business Hours';
+        ?>
+        <p>
+            <label for="<?php echo esc_attr($this->get_field_id('title')); ?>">Title:</label>
+            <input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>">
+        </p>
+        <p>
+            <small>This title will appear above the business hours in your widget area. Business hours are pulled from your settings in the <a href="<?php echo admin_url('options-general.php?page=business-profile-hours'); ?>">Business Hours</a> options page.</small>
+        </p>
+        <?php
+    }
+    
+    public function update($new_instance, $old_instance) {
+        $instance = array();
+        $instance['title'] = (!empty($new_instance['title'])) ? sanitize_text_field($new_instance['title']) : '';
+        return $instance;
+    }
+}
+
 // Create settings page
 class BusinessProfileHours {
     private $api_key;
@@ -41,6 +87,11 @@ class BusinessProfileHours {
         add_action('admin_menu', array($this, 'add_admin_menu'));
         add_action('admin_init', array($this, 'register_settings'));
         add_shortcode('google_business_hours', array($this, 'display_business_hours'));
+        
+        // Register widget
+        add_action('widgets_init', function() {
+            register_widget('Business_Hours_Widget');
+        });
         
         // Get API key, Place ID, and Display Title from settings
         $this->api_key = get_option('gpbh_api_key', '');
@@ -246,7 +297,8 @@ class BusinessProfileHours {
                 ?>
             </form>
             <h2>Usage</h2>
-            <p>Use the shortcode [google_business_hours] to display the business hours on any page or post.</p>
+            <p>Use the shortcode <code>[google_business_hours]</code> to display the business hours on any page or post.</p>
+            <p>You can also add business hours to any widget area by using the <strong>Business Hours</strong> widget in the Widgets section of your WordPress dashboard.</p>
             <h2>Cache Management</h2>
             <p>Current cache status: 
                 <?php
@@ -332,7 +384,13 @@ class BusinessProfileHours {
     }
 
     // Display business hours using shortcode
-    public function display_business_hours() {
+    public function display_business_hours($atts = array()) {
+        $defaults = array(
+            'show_title' => true
+        );
+        
+        $atts = wp_parse_args($atts, $defaults);
+        
         $hours = $this->get_business_hours();
 
         if (isset($hours['error'])) {
@@ -350,7 +408,12 @@ class BusinessProfileHours {
         }
 
         $output = '<div class="gpbh-business-hours">';
-        $output .= '<h3>' . esc_html($this->display_title) . '</h3>';
+        
+        // Only show the title if show_title is true
+        if ($atts['show_title']) {
+            $output .= '<h3>' . esc_html($this->display_title) . '</h3>';
+        }
+        
         $output .= '<table class="gpbh-hours-table">';
         $output .= '<tbody>';
 
